@@ -49,7 +49,7 @@ def transform_spherical(theta, phi, coll_angle, geometry='xz', eps=1e-10):
                       np.sin(phi)*np.sin(theta)*np.sin(coll_angle)
         theta_L = np.arccos(cos_theta_L)
         phi_L = np.arccos(-np.cos(theta)/(np.sin(theta_L) + eps))
-    elif geometry == 'xz' or geometry == 'z':
+    elif geometry == 'xz' or geometry == 'z' or geometry == 'xyz':
         cos_theta_L = np.cos(phi)*np.sin(theta)*np.sin(coll_angle) +\
                       np.cos(theta)*np.cos(coll_angle)
         theta_L = np.arccos(cos_theta_L)
@@ -328,7 +328,8 @@ class SignalAnalyzer_k:
         self.Nperp_total = Nperp_total_sph
         
     def get_background_num(self):
-        self.laser_diagnostics.photon_density(**self.sphmap_params)
+        # self.laser_diagnostics.photon_density(**self.sphmap_params)
+        self.laser_diagnostics.photon_density(self.sphmap_params, k=self.k)
         self.background_num = self.laser_diagnostics.dphoton_angular.matrix
         self.background_sph_num = self.laser_diagnostics.dphoton_spherical.matrix
         return self.background_sph_num
